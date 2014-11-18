@@ -3,4 +3,5 @@ Based on a statistical model of the kind of language used by each author, a new 
 thus selecting the one that gives the best fit.
 This program consists of 3 main classes and one helper class.
 Tests are also provided to test the correctness of each of the classes (By lecturer).
+BlueJ IDE was used to write this program.
 George Krlevski
