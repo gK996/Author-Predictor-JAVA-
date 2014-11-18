@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.params=n\ inp
+comment0.target=NgramModel(int,\ java.lang.String)
+comment0.text=\ \r\n\ Create\ an\ n-gram\ frequency\ model\ for\ an\ input\ string\r\n\ ngrams\ at\ the\ end\ of\ the\ string\ wrap\ to\ the\ front\r\n\ e.g.\ "abbbbc"\ includes\ "bca"\ and\ "cab"\ in\ its\ 3-grams\r\n\ @param\ int\ n\ size\ of\ n-grams\ to\ create\r\n\ @param\ String\ inp\ input\ string\ to\ be\ modelled\r\n
+comment1.params=inp
+comment1.target=NgramModel(java.lang.String)
+comment1.text=\ \r\n\ default\ constructor\ generates\ model\ for\ ngrams\ of\ size\ 1\r\n
+comment2.params=
+comment2.target=java.util.HashMap\ getDictionary()
+comment2.text=\r\n\ @return\ HashMap<String,Integer>\ the\ ngram\ dictionary\ with\ word\ frequencies\r\n
+comment3.params=
+comment3.target=int\ getAlphabetSize()
+comment3.text=\r\n\ @return\ int\ the\ size\ of\ the\ alphabet\ of\ a\ given\ input\r\n
+comment4.params=
+comment4.target=int\ getNumWords()
+comment4.text=\r\n\ @return\ int\ the\ total\ number\ of\ ngram\ words\ counted\ in\ the\ model\r\n
+comment5.params=freq
+comment5.target=java.util.ArrayList\ getTopWords(int)
+comment5.text=\r\n\ Make\ list\ of\ all\ words\ with\ frequency\ at\ least\ freq\r\n\ @param\ freq\ int\ lower\ frequency\ limit\ for\ returned\ words\r\n\ @return\ ArrayList\ all\ words\ with\ frequency\ more\ than\ freq\r\n
+comment6.params=
+comment6.target=java.lang.String\ toString()
+comment6.text=\r\n\ @return\ String\ representation\ of\ the\ ngram\ model\r\n
+numComments=7

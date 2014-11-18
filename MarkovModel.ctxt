@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.params=n\ s
+comment0.target=MarkovModel(int,\ java.lang.String)
+comment0.text=\r\n\ Construct\ an\ order-n\ Markov\ model\ from\ string\ s\r\n\ @param\ n\ int\ order\ of\ the\ Markov\ model\r\n\ @param\ s\ String\ input\ to\ be\ modelled\r\n
+comment1.params=
+comment1.target=int\ getK()
+comment1.text=\r\n\ @return\ order\ of\ this\ Markov\ model\r\n
+comment2.params=
+comment2.target=int\ getAlphabetSize()
+comment2.text=\r\n\ @return\ number\ of\ characters\ in\ the\ alphbet\r\n
+comment3.params=obs
+comment3.target=double\ laplace(java.lang.String)
+comment3.text=\r\n\ Calculate\ the\ Laplacian\ probability\ of\ string\ obs\ given\ this\ Markov\ model\r\n\ @input\ obs\ String\ of\ length\ k+1\r\n
+comment4.params=
+comment4.target=java.lang.String\ toString()
+comment4.text=\r\n\ @return\ String\ representing\ this\ Markov\ model\r\n
+numComments=5

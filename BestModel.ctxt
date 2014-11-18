@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.params=k\ text1\ text2\ test
+comment0.target=BestModel(int,\ java.lang.String,\ java.lang.String,\ java.lang.String)
+comment0.text=\r\n\ Generate\ k-th\ order\ Markov\ models\ for\ text1\ and\ text2\r\n\ and\ calculate\ loglikelihoods\ of\ test\ against\ each\ model.\r\n\ These\ structures\ can\ then\ be\ queried\ to\ find\ best\ matches.\r\n\ @return\ true\ if\ test\ is\ closest\ to\ text1\ and\ false\ otherwise\r\n
+comment1.params=whichModel
+comment1.target=java.util.HashMap\ logLikelihood(int)
+comment1.text=\ \r\n\ Get\ average\ log\ likelihood\ for\ the\ current\ models.\r\n\ @input\ whichModel\ 1\=model1,\ 2\=model2\r\n\ @input\ test\ String\ for\ loglikelihood\ to\ be\ calculated\r\n\ @return\ HashMap<String,Double>\ log\ likelihood\ for\ each\ word\ of\ test\r\n
+comment2.params=logs
+comment2.target=double\ totalLogLikelihood(java.util.HashMap)
+comment3.params=logs
+comment3.target=double\ averageLogLikelihood(java.util.HashMap)
+comment4.params=
+comment4.target=boolean\ chooseBestModel()
+comment4.text=\r\n\ Given\ precalculated\ model1,\ model2\ and\ loglike1\ and\ loglike2\ find\ best\ match\ to\ test\r\n\ @return\ true\ if\ text1\ is\ best\ match\ and\ false\ if\ text2\ is\ best\ match\r\n
+comment5.params=
+comment5.target=double\ confidence()
+comment5.text=\r\n\ @return\ confidence\ measure\ in\ best\ match\r\n
+comment6.params=topn
+comment6.target=java.util.HashMap\ explainBestModel(int)
+comment6.text=\r\n\ Find\ the\ top\ n\ words\ for\ which\ the\ difference\ in\ the\ \r\n\ log\ probabilities\ of\ two\ models\ are\ greatest.\r\n\ @param\ topn\ int\ number\ of\ obs,difs\ to\ return\r\n\ @return\ HashMap<String,Double>\ top\ k\ strings\ and\ \r\n\ \ \ \ their\ loglikelihood\ differences\ between\ model\ 1\ and\ model\ 2\r\n
+comment7.params=e1\ e2
+comment7.target=int\ compare(java.util.Map.Entry,\ java.util.Map.Entry)
+numComments=8

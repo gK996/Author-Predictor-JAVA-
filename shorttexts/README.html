@@ -1,0 +1,500 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transiti nal//EN"
+	"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html lang="EN">
+<head>
+
+
+</head>
+
+<!-- -------------------------------------------------------------------- -->
+
+<body bgcolor="#FFFFFF" link="#000066" vlink="#111199" alink="#3E3E3E">
+
+<h1>CITS1001 project 2 2014</h1>
+
+
+
+<b>Contents:</b>
+<ul>
+<li><A HREF="#intro">Introduction</A>
+<li><A HREF="#task">Tasks</A>
+<li><A HREF="#reading">Reading</A>
+<li><A HREF="#implementation">Implementation</A>
+<li><A HREF="#challenge">Challenge</A>
+<li><A HREF="#submissiondemo">Submission and demonstration</A>
+<li><A HREF="#assessment">Assessment Criteria</A>
+</ul>
+
+<A NAME="intro"><h3>Introduction</h3></A>
+
+Here are two quotations from books by famous authors.
+
+<p><i>
+Emma Woodhouse, handsome, clever, and rich, with a comfortable home
+and happy disposition, seemed to unite some of the best blessings of
+existence; and had lived nearly twenty-one years in the world with very
+little to distress or vex her.  She was the youngest of the two daughters of a most affectionate,
+indulgent father; and had, in consequence of her sister's marriage, been
+mistress of his house from a very early period. Her mother had died
+too long ago for her to have more than an indistinct remembrance of
+her caresses; and her place had been supplied by an excellent woman as
+governess, who had fallen little short of a mother in affection.
+</i></p>
+
+<p><i>
+Alice never could quite make out, in thinking it over afterwards, how it
+was that they began: all she remembers is, that they were running hand
+in hand, and the Queen went so fast that it was all she could do to keep
+up with her: and still the Queen kept crying 'Faster! Faster!' but Alice
+felt she COULD NOT go faster, though she had not breath left to say so.
+The most curious part of the thing was, that the trees and the other
+things round them never changed their places at all: however fast they
+went, they never seemed to pass anything. 'I wonder if all the things
+move along with us?' thought poor puzzled Alice. And the Queen seemed to
+guess her thoughts, for she cried, 'Faster! Don't try to talk!'
+</i></p>
+
+Source: <a href="http://www.gutenberg.org/">Project Gutenberg</a>
+
+<p>In this assignment, your task will be to write a computer program that can (usually) predict whether quotations
+such as these are more likely to have been written by one author or another. There are many reasonable approaches to this problem. In this assignment, we will consider one of these: We will begin by building a statistical model of the kind of language used by each author. Then, given a new piece of text, we will determine who wrote it by measuring how well it fits each of the statistical models, and selecting the one that gives the best fit.
+
+<p>The project is intended to extend your understanding of Java programming, your knowledge of the
+Java libraries and  to introduce one of the machine learning techniques used by researchers.
+
+You should spend at least one hour reading through this handout to make sure you understand what is required, so that you don't waste your time going in circles, or worse yet, hand in something you think is correct and find out later that you misunderstood the specifications. Highlight the handout, scribble on it, and find all the things you're not sure about as soon as possible.  Any questions should be 
+posted to help1001, so
+that the answers can be shared by all students.
+
+
+<p><b>Markov models.</b>&nbsp;
+The probabilistic language models we will be using are called
+<i>Markov models</i>.
+Markov models are at the heart of modern speech
+recognition systems, and are used for a broad range of natural language
+processing tasks, as well as many other problems relevant to artificial intelligence.
+They are widely used to model
+all sorts of dynamical processes in engineering, mathematics, finance and many
+other areas.
+
+<p>
+A Markov model defines a probability distribution over sequences of symbols.
+Said differently, a Markov model defines a probabilistic mechanism for randomly
+generating sequences over some alphabet of symbols.
+In a <i>zero-th order Markov model</i>, the symbols in the sequence are generated
+with a fixed probability that does not in any way depend on other symbols in the sequence.
+For instance, the alphabet might consist of just the letters <tt>a</tt> and <tt>b</tt>,
+and the zero-th
+order Markov model might specify that each symbol in the sequence is <tt>a</tt> with
+probability 2/3 and <tt>b</tt> with probability 1/3.&nbsp; Thus, such a zero-th order Markov
+model might generate a sequence like the following:
+
+<blockquote>
+<tt>a b a b a a a b b b a a a a b b b a a b a a a a a b a a a a b a a a b b</tt>
+</blockquote>
+
+<p>
+In a <i>first order Markov model</i>, the probability of the current symbol that is
+being generated can depend on preceding symbol.&nbsp; For instance, consider a
+sequence in which every occurrence of <tt>b</tt> is always followed by <tt>a</tt>, while an a is followed
+with equal probability by either <tt>a</tt> or <tt>b</tt>.&nbsp; For instance, such a model might
+generate a sequence like the following.
+
+<blockquote>
+<tt>b a b a b a b a a b a b a b a b a a b a a b a a a a a a b a b a a a a b</tt>
+</blockquote>
+
+<p>
+In this example, the sequence is likely to have about the same proportion of <tt>a</tt>'s
+and <tt>b</tt>'s as in the preceding example. However, the model is first order
+rather than zero-th order because whether or not the current symbol is <tt>a</tt> or
+<tt>b</tt>
+significantly affects the probability of what symbol will be generated next.<p>
+This idea can be generalized to a <i>k-th order Markov model</i> in which the
+probability of the current symbol can depend on the preceding <i>k</i> symbols.<p>
+Markov models are frequently used to build a probabilistic model or statistical
+estimate of a natural language.&nbsp; In modeling ordinary English text, a zero-th
+order model is clearly inadequate for most purposes, capturing only the
+frequencies of each letter.
+On the other hand, a first order Markov model
+can capture the notion, for instance, that a <tt>q</tt> is nearly always
+followed by <tt>u</tt>.
+Higher order Markov models can capture the tendency of the letters
+<tt>proba</tt> to be followed by <tt>b</tt> or <tt>t</tt>.
+(In other language applications, entire
+words are regarded as the "letters"
+of the "alphabet" so that the Markov model
+provides a model of the sequences of <i>words</i> rather than <i>letters</i>
+that are likely to be observed.
+We will not consider such a framework in
+this assignment, but you are welcome to explore it on your own.)
+
+<p><b>Creating NGrams</b>
+The first part of the assignment is to implement
+a class called <tt>NGramModel.java</tt> that constructs
+a dictionary of n-grams for a given n and input string.
+This class should provide methods to construct an n-gram and
+also getter methods to return the size of the alphabet and the total
+number of n-gram words counted for this model.
+
+<p>Method signatures to be implemented are in <code>NGramModel.java</code> and
+JUnit test cases for this class are provided in <code>testNGramModel.java</code>.
+
+
+<p><b>Creating a Markov Model</b>
+The next part of the assignment is to build
+a <i>k</i>-th order Markov model from an input string (and eventually from
+text stored in a given file).
+Later you will build an object of this class for each author of interest.
+Constructing a <i>k</i>-th order Markov model
+from text sequences is mostly a matter of counting.
+For each sequence <i>p</i> of
+length <i>k</i> (let us call it the <i>context</i>), we need to estimate the probability
+of <i>p</i> being followed by each letter <i>c</i> in our alphabet.
+Given a text sample, this probability can be estimated by the number of times that <i>p</i> is
+followed by <i>c</i>, divided by the number of times that <i>p</i> appears as a
+context at all.
+That is, we can estimate the probability of <i>c</i> following <i>p</i>
+by <i>N</i>(<i>p&middot;c</i>) / <i>N</i>(<i>p</i>), where
+<i>N</i>(<i>p&middot;c</i>) denotes the number of times we observe the concatenated
+sequence <i>p&middot;c</i>, and <i>N</i>(<i>p</i>) denotes the number of times that
+we observe <i>p</i>.
+
+<p>
+Unfortunately, this estimate will be problematic if
+some of the counts are zero, as is certain to happen on real data.
+Therefore, instead, we will use a different &quot;smoothed&quot; estimate, namely
+(<i>N</i>(<i>p&middot;c</i>) + 1) / (<i>N</i>(<i>p</i>) + <i>S</i>),
+where <i>S</i> is the size of our alphabet.
+This form of smoothing,
+called <i>Laplace smoothing</i>, has theoretical justification coming from probability
+theory, and ensures that zero counts will not be a problem.
+
+<p>
+For example, if the input text is
+<tt>"aabcabaacaac"</tt>, and we
+are using a second-order Markov model (<i>k</i> = 2) and the three-letter alphabet
+is <tt>{a, b, c}</tt>,
+then we can estimate the probability that <tt>"aa"</tt> is
+followed by <tt>'c'</tt>; by (2 + 1) / (3 + 3) = 1/2 since
+<i>N</i>(<tt>aa</tt>) = 3, <i>N</i>(<tt>aac</tt>) = 2 and <i>S</i> = 3.
+Similarly, the probabilities that <tt>"aa"</tt> is followed by
+<tt>'a'</tt> and <tt>'b'</tt> is 1/6 and 1/3, respectively.
+<!-- Note that the probabilities sum to 1. No they do not -->
+
+<p>
+One thing to notice here: To handle the beginning and end of the string, we
+treat the string as circular. Thus, <i>N</i>(<tt>caa</tt>) = 2 instead of 1.
+
+
+<p>
+So, in constructing a Markov model, your first job is to write code that will
+compute the appropriate counts <i>N</i>(&middot;) by scanning the text
+file and counting how many times all sequences
+of the required lengths appear in the file.
+These counts should be stored appropriately for later use.
+You should also compute and record the alphabet size.
+Organize your program by creating a class
+<tt>MarkovModel</tt> so that the
+first line below computes the number of occurrences
+of each substring from s of size k and k+1; the second
+line prints it to standard output; and remaining lines
+compute and print Laplace smoothed probability
+estimates.
+
+<blockquote><pre>
+MarkovModel model = new MarkovModel(k, s);
+System.out.print(model.toString());
+System.out.printf("%.4f\n", model.laplace("aac"));
+System.out.printf("%.4f\n", model.laplace("aaa"));
+System.out.printf("%.4f\n", model.laplace("aab"));
+</pre></blockquote>
+
+For example, when k = 2 and s = <tt>"aabcabaacaac"</tt>,
+this code fragment should print the following.
+
+
+<blockquote><pre>
+ca 3
+ba 1
+ac 2
+aa 3
+ab 2
+bc 1
+Alphabet size = 3
+Number of words = 12
+aba 1
+aab 1
+aac 2
+cab 1
+abc 1
+caa 2
+bca 1
+baa 1
+aca 2
+Alphabet size = 3
+Number of words = 12
+0.5000
+0.1667
+0.3333
+</pre></blockquote>
+
+
+
+
+<p><b>Determining the likelihood of a new sequence.</b>
+
+Next you will write a class <tt>BestModel.java</tt> for employing Markov models to 
+test texts.
+
+We will want to use the Markov model that you constructed from data
+to compute a measure of how
+well that model fits a new text sequence.
+We will also use this measure
+to determine which of two models better fits a
+new test String.
+To compute a measure of fit, we will compute the
+probability of the model generating the new sequence, a quantity usually called
+the <i>likelihood</i> of the sequence under the model. 
+For each symbol <i>c</i>
+in the sequence, we can compute the probability of observing <i>c</i> under the model,
+given its <i>k</i>-letter context <i>p</i>.
+In particular, this is just the Laplace-smoothed
+estimate given above.
+To compute the likelihood, or probability of the
+entire sequence, we can multiply these probabilities together,
+for all symbols in the sequence. Although correct mathematically,
+the resulting product might be indistinguishable from zero using
+floating point arithmetic.
+Therefore, rather than
+multiplying probabilities, you will need to work with <i>log</i> probabilities.&nbsp;
+That is, for each symbol <i>c</i> in the sequence, you will need to compute the
+<i>log</i> of
+its probability, and you will then <i>add</i> (rather than multiply) these log
+probabilities to arrive at the final log likelihood of the sequence.
+Keep in mind that all of these log probabilities will be negative (since
+probabilities are never more than one).
+
+<p>
+The next task is to compute, for a given string, and for each position <i>i</i> in
+the string, an estimate of the log probability of the character at position <i>i</i>,
+given its <i>k</i>-character context. The log likelihood of this entire sequence
+can then be computed as the sum of these log probabilities.
+
+<p>
+For instance, continuing the example above, having constructed the second order
+(<i>k</i> = 2) Markov model,
+suppose we are given a new string <tt>"aabca"</tt>. We can compute the log
+probability of each of the four symbols in this string as follows (where the
+first column gives the context of each of the symbols in the second column):
+
+<blockquote>
+<pre>
+context c log probability
+------------------------------------------------
+"aa" 'b' log((1 + 1) / (3 + 3)) = -1.0986
+"ab" 'c' log((1 + 1) / (2 + 3)) = -0.9163
+"bc" 'a' log((1 + 1) / (1 + 3)) = -0.6931
+"ca" 'a' log((2 + 1) / (3 + 3)) = -0.6931
+"aa" 'a' log((0 + 1) / (3 + 3)) = -1.7918
+
+TOTAL log likelihood = -5.1930
+AVERAGE log likelihood = -1.0386
+</pre>
+</blockquote>
+
+<p>
+One thing to notice here: To handle the beginning and end of the string, we
+again treat the string as circular. Thus, in <tt>"aabca"</tt>,
+the character following the context <tt>"ca"</tt> is <tt>'a'</tt>.
+
+
+<p><b>Choosing the best model.</b>
+Now that we have a method of measuring the
+fit of a model to a particular string, we can choose the best model to be the
+one that maximizes the likelihood of the string. In other words, we can
+simply measure the likelihood of the string under each model
+and choose the one that is greatest.
+
+Write a class <code>BestModel</code> with constructor,
+<p>
+<code>public BestModel(int k, String text1, String text2, String test)</code>
+
+that takes an order parameter k, two input strings for training and a test string as its input.
+Your program should read the test sequence
+and decide whether it is more likely to come from the Markov model of
+text1 or text2.
+Having calculated the necessary models,
+the class offers a number of methods for choosing the best match, and the confidence of that match.
+
+<p>
+To get an idea of why the algorithm is making its predictions, you should also
+find and print the top positions in the test sequence where the difference in
+the log probabilities of the two models are greatest by implementing the method:
+<code>explainBestModel</code>.  See the comments and tests for details.
+
+
+
+<A NAME="implementation"><h3>Possible Staged Implementation</h3></A>
+
+This project is much larger than project 1, so you will need a good strategy for 
+tackling it. Here are some suggestions.
+
+
+
+<p>First, read this handout thoroughly and carefully, making sure you understand everything in it, particularly the different linguistic features.
+Read the given BlueJ project skeletons to get an overview of what you will be writing. It is not necessary at this point to understand every detail of the
+provided code in order to make progress on this project.
+
+<p>The project has been broken down into suggested separate stages
+to help you create the finished version in small steps. You
+are recommended to compile, test and run the application after 
+each stage to check that the changes you have made are correct.
+To avoid getting overwhelmed, deal with one class at a time,
+and develop one method a time. Start with methods that don't call any other methods; this will allow you to test them right away.   At each stage use the provided JUnit test classes to check your code.
+Also use the <code>Demo</code> methods to check your implementation.
+
+<p>You can gain good marks even if you do not complete all the
+methods, so long as the code you have written compiles and runs
+correctly.  But if you submit a large body of code that does 
+not compile or that crashes, then few marks can be awarded. 
+
+
+<A NAME="challenge"><h3>Challenge Tasks (optional)</h3></A>
+
+Completing all the steps (above) is worth up to 80% of the total 
+marks for the project.
+If you have time and wish to extend your knowledge of Java, then
+you are encouraged to extend your project to take it
+further towards a complete application. <b>Up to 20%</b> will be
+awarded for the completion and demonstration of challenge tasks.
+There are only a few project marks to be awarded for the 
+Challenge tasks (relative to the effort required): 
+this part of the project is primarily intended for interest and fun.
+
+<p>It is up to you to identify, select and complete additional 
+functionality in your challenge code.
+You must submit a TEXT file called <code>Challenge.txt</code>.
+This file should give a brief summary 
+of your challenge code: what you have implemented and how it works.
+Make sure that your file uses exactly the name Challenge.txt, or
+your challenge activities may not be noted, and so may receive no marks. 
+
+Some possible additions could be to  apply your programs to other
+related tasks (for instance, distinguishing two authors, distinguishing German
+text from English, etc.) or by comparing different sampling methods (Good-Turing, assuming a Dirichlet prior, or Jeffreys-Perks).
+Submit any data files that you create (or, if
+they are too big for cssubmit, tell us how we can get them).
+Write a description of how well it performs.
+
+Analyze your approach to this problem giving estimates of
+its time and space requirements. Also, critically explore the
+effectiveness of this technique for this task.
+
+
+<A NAME="submissiondemo"><h3>Submission and Demonstration</h3></A>
+
+In accordance with School policy, a <b>penalty of 20% 
+of the total project marks (that is, 10 marks) per day or part thereof</b>
+will be applied
+to late submissions.  You are responsible for ensuring that your project is
+uploaded to cssubmit before the deadline published on the cssubmit area.
+
+Submit the following files to 
+<a href="https://secure.csse.uwa.edu.au/run/cssubmit?p=np&open=CITS1001-1">cssubmit</a>
+
+<ol>
+<li>NgramModel.java
+<li>MarkovModel.java
+<li>BestModel.java
+
+<p>If you have completed any challenge tasks, then also submit
+
+<li>The .java files for any additional classes you have implemented 
+or modified
+<li>A TEXT file called <code>Challenge.txt</code> giving a brief summary of your
+challenge code: what you have implemented and how it works.
+</ol>
+
+<p><b>Do not submit zip files or any text files you used for testing.</b>  You can show these at your demonstration.  You are responsible for checking the messages given by the submission system and ensuring that your submission is in the correct format and with correct Java signatures.
+
+<p>You do not need to submit the Demo class, the TextFileManager or the JUnit test classes.
+Your submission will be marked using the versions of these classes provided with the 
+downloaded project.
+Remember that, as in the first project, you must not change any of the given signatures
+in the project files.  But you are welcome to add new methods if you need them.
+You are responsible for checking that your submission 
+compiles with the test files provided in the project source, and 
+that your code passes as many of
+the test cases as you are able to complete.
+
+
+<p>In accordance with the departmental policy on plagiarism, 
+all submitted lab work is expected to be the sole effort of the 
+student submitting the work.
+All submissions will be checked for similarity and the
+consequences for misconduct can be severe, 
+including being awarded 0 marks for assessment or
+exclusion from the unit.
+
+<p><b>Project demonstrations (15 minutes) will be held during 
+normal lab times in WEEK 13.  You are responsible for
+contacting your lab tutor to book a demonstration session 
+BEFORE THE PROJECT SUBMISSION DEADLINE</b>.
+During the demonstration you will be asked to 
+run your project,
+answer questions about your code, 
+and make modifications to your code.
+Students who miss their demonstration will be awarded 0 marks
+for this part of the assessment.  
+
+<p>
+If you have extenuating circumstances which prevent you
+meeting the project requirements, these circumstances
+must be reported through the student affairs staff of your Faculty
+as soon as is practical.
+
+
+<A NAME="assessment"><h3>Assessment Criteria</h3></A>
+
+This project will be marked out of 50 using the following criteria:
+
+<h4>Correctness (/20) </h4>
+
+(Have all methods in  the project classes been implemented? 
+Do they work as specified by the provided JUnit tests
+and the Demo class?)
+
+<h4>Style (/10)  </h4>
+
+(Is the code clearly laid out with correct indentation
+and good choice of variable names?  
+Have good choices been
+made for programming constructs and patterns ?
+Is every class, method and field commented as it should be ?
+Have the author and version tags been completed ?)
+ 
+
+<h4>Demonstration (/15)  </h4>
+
+(The Demo class runs with expected results. Can you explain your Java code 
+and make minor changes to it ?  Can you comment on the efficiency of your implementation.)
+
+<h4>Challenge Tasks (/5) </h4>
+
+(Assess the quality and quantity of the code written for the 
+challenge task(s).  Does the Challenge.txt file contain a clear
+summary of what has been done and how?)
+
+
+<i>
+<p>Good luck!<br>
+Rachel Cardell-Oliver<br>
+CITS1001 Unit Coordinator
+</i>
+
+<p><i>This project and its description are adapted by Rachel Cardell-Oliver from a project written by 
+Rob Schapire (and slightly adapted by Kevin Wayne) at Princeton.</i></p>
+</body>
+</html>
